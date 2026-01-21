@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unique - Premium Car Rental</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="settings_styles.css">
     <!-- Lucide Icons for simple SVG icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
     <canvas id="bg-canvas"></canvas>
     <div class="page-background">
@@ -27,61 +30,63 @@
                     <input type="text" placeholder="Search for items..." class="nav-input search-grow">
                 </div>
                 <div class="header-actions">
-                <div class="settings-wrapper">
-                    <button class="btn-icon-only" id="settings-btn"><i data-lucide="settings"></i></button>
-                    <!-- Settings Dropdown Menu -->
-                    <div class="settings-menu" id="settings-menu">
-                        <div class="settings-header">
-                            <h3>Settings</h3>
-                        </div>
-                        
-                        <div class="settings-section">
-                            <span class="section-label">Appearance</span>
-                            <div class="setting-row">
-                                <div class="setting-info">
-                                    <i data-lucide="moon" class="setting-icon"></i>
-                                    <span>Dark Mode</span>
-                                </div>
-                                <label class="switch">
-                                    <input type="checkbox" id="dark-mode-toggle">
-                                    <span class="slider round"></span>
-                                </label>
+                    <div class="settings-wrapper">
+                        <button class="btn-icon-only" id="settings-btn"><i data-lucide="settings"></i></button>
+                        <!-- Settings Dropdown Menu -->
+                        <div class="settings-menu" id="settings-menu">
+                            <div class="settings-header">
+                                <h3>Settings</h3>
                             </div>
-                        </div>
 
-                        <div class="divider"></div>
-
-                        <div class="settings-section">
-                            <span class="section-label">Preferences</span>
-                            <div class="setting-row">
-                                <div class="setting-info">
-                                    <i data-lucide="bell" class="setting-icon"></i>
-                                    <span>Notifications</span>
+                            <div class="settings-section">
+                                <span class="section-label">Appearance</span>
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <i data-lucide="moon" class="setting-icon"></i>
+                                        <span>Dark Mode</span>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="dark-mode-toggle">
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
-                                <label class="switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider round"></span>
-                                </label>
                             </div>
-                            <div class="setting-row interactive">
-                                <div class="setting-info">
-                                    <i data-lucide="globe" class="setting-icon"></i>
-                                    <span>Language</span>
+
+                            <div class="divider"></div>
+
+                            <div class="settings-section">
+                                <span class="section-label">Preferences</span>
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <i data-lucide="bell" class="setting-icon"></i>
+                                        <span>Notifications</span>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
-                                <span class="setting-value">English <i data-lucide="chevron-right" class="chevron-mini"></i></span>
+                                <div class="setting-row interactive">
+                                    <div class="setting-info">
+                                        <i data-lucide="globe" class="setting-icon"></i>
+                                        <span>Language</span>
+                                    </div>
+                                    <span class="setting-value">English <i data-lucide="chevron-right"
+                                            class="chevron-mini"></i></span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="divider"></div>
+                            <div class="divider"></div>
 
-                        <div class="settings-links">
-                            <a href="#" class="menu-link"><i data-lucide="user"></i> Account</a>
-                            <a href="#" class="menu-link"><i data-lucide="credit-card"></i> Billing</a>
-                            <a href="#" class="menu-link"><i data-lucide="help-circle"></i> Help</a>
-                            <a href="#" class="menu-link logout"><i data-lucide="log-out"></i> Log Out</a>
+                            <div class="settings-links">
+                                <a href="#" class="menu-link"><i data-lucide="user"></i> Account</a>
+                                <a href="#" class="menu-link"><i data-lucide="credit-card"></i> Billing</a>
+                                <a href="../landingpage/how-it-works.html" class="menu-link"><i
+                                        data-lucide="help-circle"></i> Help</a>
+                                <a href="#" class="menu-link logout"><i data-lucide="log-out"></i> Log Out</a>
+                            </div>
                         </div>
                     </div>
-                </div>
                     <button class="btn-box"><i data-lucide="bell"></i></button>
                     <button class="btn-box"><i data-lucide="user"></i></button>
                 </div>
@@ -132,9 +137,10 @@
                         IN NEW YORK
                     </h1>
                     <p class="hero-description">
-                        Don't deny yourself the pleasure of driving the best premium cars from around the world here and now.
+                        Don't deny yourself the pleasure of driving the best premium cars from around the world here and
+                        now.
                     </p>
-                    
+
                     <div class="brand-slider">
                         <div class="brand-item active">
                             <i data-lucide="zap" class="brand-icon"></i>
@@ -149,7 +155,8 @@
                     </div>
                 </div>
                 <div class="hero-visual">
-                    <img src="assets/hero_car.png" alt="Silver Porsche Convertible" class="hero-car-image" id="hero-car">
+                    <img src="assets/hero_car.png" alt="Silver Porsche Convertible" class="hero-car-image"
+                        id="hero-car">
                     <div class="map-pattern"></div>
                 </div>
             </section>
@@ -159,7 +166,8 @@
                 <div class="app-content">
                     <span class="tagline">CONVENIENT INTERACTION</span>
                     <h2 class="section-title">Modern App</h2>
-                    <p class="section-desc">Manage your rental experience entirely from your phone. Unlock cars, check stats, and more.</p>
+                    <p class="section-desc">Manage your rental experience entirely from your phone. Unlock cars, check
+                        stats, and more.</p>
                     <button class="btn btn-black btn-pill">
                         <i data-lucide="apple" class="icon-sm"></i>
                         Download App
@@ -186,33 +194,43 @@
                         <button class="chip">Gloves</button>
                     </div>
                 </div>
-                
+
                 <div class="fleet-grid">
                     <!-- Placeholder cards -->
                     <div class="car-card large">
                         <img src="assets/car_thumb_1.png" alt="Car">
-                        <div class="car-info"><h3>Porsche 911</h3><p>$450/day</p></div>
+                        <div class="car-info">
+                            <h3>Porsche 911</h3>
+                            <p>$450/day</p>
+                        </div>
                     </div>
                     <div class="car-card large">
-                         <img src="assets/car_thumb_2.png" alt="Car">
-                         <div class="car-info"><h3>Ferrari 488</h3><p>$600/day</p></div>
+                        <img src="assets/car_thumb_2.png" alt="Car">
+                        <div class="car-info">
+                            <h3>Ferrari 488</h3>
+                            <p>$600/day</p>
+                        </div>
                     </div>
                     <div class="car-card large">
-                         <img src="assets/car_thumb_3.png" alt="Car">
-                         <div class="car-info"><h3>Lamborghini Huracan</h3><p>$700/day</p></div>
+                        <img src="assets/car_thumb_3.png" alt="Car">
+                        <div class="car-info">
+                            <h3>Lamborghini Huracan</h3>
+                            <p>$700/day</p>
+                        </div>
                     </div>
                     <!-- Small row -->
                     <div class="car-card small">
                         <img src="assets/car_thumb_4.png" alt="Car">
                     </div>
                     <div class="car-card small">
-                         <img src="assets/car_thumb_1.png" alt="Car">
+                        <img src="assets/car_thumb_1.png" alt="Car">
                     </div>
                     <div class="car-card small">
-                         <img src="assets/car_thumb_2.png" alt="Car">
+                        <img src="assets/car_thumb_2.png" alt="Car">
                     </div>
                     <div class="car-card small view-all-card">
-                         <a href="all-items.html" class="btn-text">Show All (83 models) <i data-lucide="arrow-right"></i></a>
+                        <a href="all-items.html" class="btn-text">Show All (83 models) <i
+                                data-lucide="arrow-right"></i></a>
                     </div>
                 </div>
             </section>
@@ -246,7 +264,7 @@
                 <h2 class="team-title">Brought to you by:</h2>
                 <div class="team-grid">
                     <div class="team-card">
-                        <div class="team-avatar">  
+                        <div class="team-avatar">
                             <i data-lucide="user"></i>
                         </div>
                         <h3 class="team-name">Aashutosh Kafle</h3>
@@ -336,9 +354,10 @@
             <form id="share-item-form">
                 <div class="form-group">
                     <label class="form-label">Item Name</label>
-                    <input type="text" class="form-input" name="itemName" required placeholder="e.g., Canon DSLR Camera">
+                    <input type="text" class="form-input" name="itemName" required
+                        placeholder="e.g., Canon DSLR Camera">
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Category</label>
                     <div class="custom-select form-select">
@@ -369,7 +388,7 @@
                     <label class="form-label">Expiry Date</label>
                     <input type="date" class="form-input" name="itemExpiry" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Location</label>
                     <input type="text" class="form-input" name="itemLocation" required placeholder="e.g. New York, NY">
@@ -399,7 +418,8 @@
     <script>
         lucide.createIcons();
     </script>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
     <script src="background-3d.js"></script>
 </body>
+
 </html>

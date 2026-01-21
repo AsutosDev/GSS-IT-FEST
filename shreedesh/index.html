@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sajha Share - Connect, Lend, Borrow</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'share-pink': '#F472B6',
+                        'share-purple': '#4F46E5',
+                        'share-cyan': '#06B6D4',
+                        'share-dark': '#020617', /* Deep Dark Blue */
+                        'share-light': '#F8FAFC',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body
+    class="bg-share-light dark:bg-share-dark text-slate-800 dark:text-gray-100 overflow-hidden transition-colors duration-500">
+
+    <div class="relative w-full h-[100dvh] flex flex-col overflow-hidden">
+
+        <!-- Header -->
+        <header class="w-full p-4 md:p-6 flex justify-between items-center shrink-0 relative z-50">
+            <div class="flex items-center gap-2">
+                <div class="font-bold text-xl md:text-2xl tracking-tighter flex items-center gap-3">
+                    <img src="logolong.png" alt="Sajha Share Logo" class="h-10 md:h-16 object-contain"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+                    <span style="display:none" class="text-share-pink text-2xl md:text-3xl drop-shadow-sm">साझा
+                        शेयर</span>
+                    <span
+                        class="hidden sm:inline-block text-base md:text-lg tracking-widest border-l pl-3 ml-1 transition-colors duration-300 text-slate-800 border-slate-800/20 opacity-90 dark:text-white dark:border-white/20 dark:opacity-90">Sajha
+                        Share</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 md:gap-6">
+                <!-- Desktop Nav -->
+                <nav
+                    class="hidden md:flex gap-6 text-sm font-medium transition-colors duration-300 text-slate-600 dark:text-gray-300">
+                    <a href="#" class="flex items-center gap-2 transition-colors hover:text-share-pink"><i
+                            data-lucide="home" class="w-4 h-4"></i><span>Home</span></a>
+                    <a href="#" class="flex items-center gap-2 transition-colors hover:text-share-pink"><i
+                            data-lucide="search" class="w-4 h-4"></i><span>Browse</span></a>
+                    <a href="#" class="flex items-center gap-2 transition-colors hover:text-share-pink"><i
+                            data-lucide="users" class="w-4 h-4"></i><span>Community</span></a>
+                </nav>
+
+                <!-- Theme Toggle -->
+                <button id="theme-toggle"
+                    class="p-2 rounded-full transition-all duration-300 active:scale-95 cursor-pointer z-50 relative overflow-hidden bg-white text-slate-800 shadow-md hover:bg-slate-100 dark:bg-white/10 dark:text-yellow-300 dark:hover:bg-white/20 dark:shadow-none">
+                    <div id="theme-icon-container" class="transition-transform duration-300 ease-out">
+                        <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                    </div>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 w-full overflow-y-auto overflow-x-hidden relative z-40">
+            <div class="min-h-full w-full flex flex-col items-center justify-center p-4">
+
+                <!-- Auth Container -->
+                <div class="relative z-10 w-full max-w-sm md:max-w-6xl mx-auto transition-all duration-300">
+
+                    <!-- Seamless Layout: Dark mode removes the card background -->
+                    <div id="auth-card"
+                        class="bg-white/90 border-white/60 shadow-2xl backdrop-blur-xl border rounded-3xl overflow-hidden relative z-30 flex flex-col md:flex-row min-h-0 md:min-h-[600px] transition-all duration-500 shadow-slate-200/50 dark:bg-transparent dark:border-none dark:shadow-none dark:backdrop-blur-none">
+
+                        <!-- Image Vector Section (Seamless in dark mode) -->
+                        <div id="image-panel"
+                            class="hidden md:flex flex-col justify-center items-center w-1/2 relative z-20 transition-all duration-700 p-8 md:p-12">
+                            <!-- Vector Image Container -->
+                            <div class="relative w-full h-full max-w-md aspect-square flex items-center justify-center">
+                                <img id="auth-image" src="light-in.png" alt="Auth Illustration"
+                                    class="w-full h-full object-contain drop-shadow-2xl dark:drop-shadow-[0_0_30px_rgba(244,114,182,0.15)] transition-all duration-500">
+                            </div>
+                            <!-- Live Text Overlay -->
+                            <div class="mt-8 text-center max-w-sm">
+                                <h2 id="image-title"
+                                    class="text-2xl font-bold tracking-tight mb-3 text-slate-900 dark:text-white">
+                                    Welcome Back</h2>
+                                <p id="image-desc" class="text-base text-slate-600 dark:text-gray-400 leading-relaxed">
+                                    Continue your sharing journey with Sajha Share.</p>
+                            </div>
+                        </div>
+
+                        <!-- Form Section (Floating in dark mode) -->
+                        <div id="form-panel"
+                            class="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-center relative z-10">
+
+                            <div class="max-w-md mx-auto w-full">
+                                <div class="mb-8 md:mb-10">
+                                    <h1 id="form-title"
+                                        class="text-3xl md:text-4xl font-bold mb-3 tracking-tight text-slate-800 dark:text-white">
+                                        Sign In</h1>
+                                    <p id="form-desc" class="text-slate-500 text-base dark:text-gray-400">Enter your
+                                        credentials to access your account.</p>
+                                </div>
+
+                                <form id="auth-form" class="space-y-5"
+                                    onsubmit="event.preventDefault(); alert('Action submitted! (Demo)');">
+
+                                    <!-- Name (Signup) -->
+                                    <div id="field-name"
+                                        class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0">
+                                        <div class="relative group">
+                                            <i data-lucide="user"
+                                                class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-share-cyan transition-colors w-5 h-5 dark:text-gray-500"></i>
+                                            <input type="text" placeholder="Full Name"
+                                                class="w-full bg-slate-50 text-slate-900 border-slate-200 border rounded-2xl px-12 py-4 focus:outline-none focus:border-share-cyan focus:ring-1 focus:ring-share-cyan transition-all text-sm font-medium dark:bg-white/5 dark:text-white dark:border-white/10 dark:focus:border-share-cyan/50 dark:placeholder-gray-600">
+                                        </div>
+                                    </div>
+
+                                    <!-- Location (Signup) -->
+                                    <div id="field-location"
+                                        class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0">
+                                        <div class="relative group">
+                                            <i data-lucide="map-pin"
+                                                class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-share-cyan transition-colors w-5 h-5 dark:text-gray-500"></i>
+                                            <select
+                                                class="w-full bg-slate-50 text-slate-900 border-slate-200 border rounded-2xl px-12 py-4 focus:outline-none focus:border-share-cyan focus:ring-1 focus:ring-share-cyan transition-all appearance-none cursor-pointer text-sm font-medium dark:bg-white/5 dark:text-white dark:border-white/10 dark:focus:border-share-cyan/50">
+                                                <option value="">Select District</option>
+                                                <option value="Kathmandu">Kathmandu</option>
+                                                <option value="Lalitpur">Lalitpur</option>
+                                                <option value="Pokhara">Pokhara</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="relative group">
+                                        <i data-lucide="mail"
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-share-pink transition-colors w-5 h-5 dark:text-gray-500 text-icon-dynamic"></i>
+                                        <input type="email" placeholder="Email Address"
+                                            class="w-full bg-slate-50 text-slate-900 border-slate-200 border rounded-2xl px-12 py-4 focus:outline-none focus:ring-1 transition-all text-sm font-medium focus:border-share-pink focus:ring-share-pink border-dynamic dark:bg-white/5 dark:text-white dark:border-white/10 dark:focus:border-share-pink/50 dark:placeholder-gray-600">
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="relative group">
+                                        <i data-lucide="lock"
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-share-pink transition-colors w-5 h-5 dark:text-gray-500 text-icon-dynamic"></i>
+                                        <input id="password-input" type="password" placeholder="Password"
+                                            class="w-full bg-slate-50 text-slate-900 border-slate-200 border rounded-2xl px-12 py-4 focus:outline-none focus:ring-1 transition-all text-sm font-medium focus:border-share-pink focus:ring-share-pink border-dynamic dark:bg-white/5 dark:text-white dark:border-white/10 dark:focus:border-share-pink/50 dark:placeholder-gray-600">
+                                        <button type="button" onclick="togglePassword()"
+                                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-800 cursor-pointer p-1 transition-colors dark:text-gray-500 dark:hover:text-white">
+                                            <i data-lucide="eye" class="w-5 h-5"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <button type="submit" id="submit-btn"
+                                        class="w-full py-4 rounded-2xl font-bold text-white shadow-xl transform active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 mt-6 cursor-pointer text-base bg-gradient-to-r from-share-pink to-share-purple hover:shadow-share-pink/20">
+                                        <span id="submit-text">Sign In</span>
+                                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                                    </button>
+                                </form>
+
+                                <div class="mt-8 text-center flex items-center justify-center gap-2 relative z-20">
+                                    <span id="switch-text" class="text-slate-500 text-sm dark:text-gray-400">New to
+                                        Sajha Share?</span>
+                                    <button type="button" onclick="toggleAuthMode()" id="switch-btn"
+                                        class="text-sm font-bold transition-all hover:tracking-wide flex items-center gap-1 cursor-pointer text-share-pink">
+                                        Create an account
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Ambient Glow (Subtle & Deep) -->
+                    <div id="blur-1"
+                        class="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 rounded-full blur-[120px] opacity-20 transition-colors duration-700 pointer-events-none bg-share-pink dark:opacity-10">
+                    </div>
+                    <div id="blur-2"
+                        class="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-[120px] opacity-20 transition-colors duration-700 pointer-events-none bg-share-cyan dark:opacity-10">
+                    </div>
+
+                </div>
+
+                <!-- Footer (Hidden in layout, but kept for semantic structure) -->
+                <footer
+                    class="mt-8 text-center text-xs w-full transition-colors duration-300 block md:hidden text-slate-400 dark:text-gray-600 opacity-50">
+                    <p>&copy; 2024 Sajha Share.</p>
+                </footer>
+
+            </div>
+        </main>
+
+        <!-- Desktop Footer -->
+        <footer
+            class="w-full p-4 text-center text-xs hidden md:block shrink-0 transition-colors duration-300 relative z-40 text-slate-400 dark:text-gray-600 opacity-60">
+            <p>&copy; 2024 Sajha Share. Connect, Lend, Borrow.</p>
+        </footer>
+
+        <!-- Mobile Bottom Nav -->
+        <nav
+            class="md:hidden fixed bottom-0 left-0 right-0 z-[100] h-16 flex justify-around items-center px-2 pb-1 backdrop-blur-xl border-t transition-colors duration-300 bg-white/95 border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] dark:bg-share-dark/95 dark:border-white/5 dark:shadow-none">
+            <a href="#"
+                class="flex flex-col items-center justify-center gap-1 w-full h-full active:scale-95 transition-transform text-slate-500 hover:text-share-purple dark:text-gray-400 dark:hover:text-white">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Home</span>
+            </a>
+            <a href="#"
+                class="flex flex-col items-center justify-center gap-1 w-full h-full active:scale-95 transition-transform text-slate-500 hover:text-share-purple dark:text-gray-400 dark:hover:text-white">
+                <i data-lucide="search" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Browse</span>
+            </a>
+            <a href="#"
+                class="flex flex-col items-center justify-center gap-1 w-full h-full active:scale-95 transition-transform text-slate-500 hover:text-share-purple dark:text-gray-400 dark:hover:text-white">
+                <i data-lucide="users" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Community</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- App Logic -->
+    <script src="script.js"></script>
+</body>
+
+</html>
