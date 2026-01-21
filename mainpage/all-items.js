@@ -43,8 +43,18 @@ document.addEventListener('DOMContentLoaded', () => {
         "Services": ["Cleaning", "Gardening", "Moving Help", "Photography", "Tutoring"]
     };
 
+    // Generate random mock data
+    const locations = ["New York, NY", "Brooklyn, NY", "Jersey City, NJ", "Queens, NY", "Manhattan, NY"];
+    
+    // Helper to get random date in future
+    function getRandomExpiry() {
+        const date = new Date();
+        date.setDate(date.getDate() + Math.floor(Math.random() * 30) + 1); // 1-30 days future
+        return date.toISOString().split('T')[0];
+    }
+
     // Generate items
-    for (let i = 21; i <= 150; i++) { // Increased count to cover all categories
+    for (let i = 21; i <= 150; i++) { 
         const category = allCategories[Math.floor(Math.random() * allCategories.length)];
         let itemName;
 
@@ -72,9 +82,24 @@ document.addEventListener('DOMContentLoaded', () => {
             category: category,
             owner: owners[Math.floor(Math.random() * owners.length)],
             price: Math.floor(Math.random() * 50) + 5,
-            available: Math.random() > 0.2
+            available: Math.random() > 0.2,
+            location: locations[Math.floor(Math.random() * locations.length)],
+            expiryDate: getRandomExpiry()
         });
     }
+
+    // Load User Shared Items from LocalStorage
+    const storedItems = JSON.parse(localStorage.getItem('userSharedItems') || '[]');
+    if (storedItems.length > 0) {
+        // Add stored items to the beginning of the list
+        storedItems.forEach(item => {
+            // Ensure no duplicate IDs if possible, or just push
+            items.unshift(item);
+        });
+    }
+
+    // Expose items to global scope for Share Modal
+    window.allItems = items;
 
     const container = document.getElementById('items-container');
     let currentFilter = 'All';
@@ -84,12 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let initialSearch = urlParams.get('search');
 
     // Render items with optional search
-    function renderItems(filter = 'All', searchQuery = '') {
+    window.renderItems = function(filter = 'All', searchQuery = '') {
         if(!container) return; // Guard clause
 
         container.innerHTML = '';
         
-        let filteredItems = items;
+        let filteredItems = window.allItems; // Use global items
 
         // Apply Category Filter
         if (filter !== 'All') {
@@ -102,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
             filteredItems = filteredItems.filter(item => 
                 item.name.toLowerCase().includes(lowerQuery) || 
                 item.category.toLowerCase().includes(lowerQuery) ||
-                item.owner.toLowerCase().includes(lowerQuery)
+                item.owner.toLowerCase().includes(lowerQuery) ||
+                (item.location && item.location.toLowerCase().includes(lowerQuery))
             );
         }
 
@@ -129,7 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="item-owner">
                         <div class="owner-avatar">${item.owner[0]}</div>
-                        <span>${item.owner}</span>
+                        <div class="owner-info">
+                            <span>${item.owner}</span>
+                            ${item.location ? `<span class="item-location">${item.location}</span>` : ''}
+                        </div>
                     </div>
                     <div class="item-meta">
                         <div class="item-price">
@@ -156,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, 100);
     }
+
 
     // Get category icon
     function getCategoryIcon(category) {

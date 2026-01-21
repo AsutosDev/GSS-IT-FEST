@@ -44,36 +44,43 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // Custom Select Dropdown
-    const customSelect = document.querySelector('.custom-select');
-    if (customSelect) {
-        const trigger = customSelect.querySelector('.select-trigger');
-        const options = customSelect.querySelectorAll('.select-option');
-        const label = customSelect.querySelector('.select-label');
+    // Generic Custom Select Logic
+    function setupCustomSelect(selectElement) {
+        const trigger = selectElement.querySelector('.select-trigger');
+        const options = selectElement.querySelectorAll('.select-option');
+        const label = selectElement.querySelector('.select-label');
 
-        // Toggle dropdown
         trigger.addEventListener('click', (e) => {
             e.stopPropagation();
-            customSelect.classList.toggle('active');
+            // Close other selects
+            document.querySelectorAll('.custom-select').forEach(s => {
+                if(s !== selectElement) s.classList.remove('active');
+            });
+            selectElement.classList.toggle('active');
         });
 
-        // Select option
         options.forEach(option => {
-            option.addEventListener('click', () => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent closing immediately
                 const value = option.getAttribute('data-value');
                 label.textContent = option.textContent;
-                customSelect.classList.remove('active');
-                // You can add additional logic here (e.g., filter items)
-                console.log('Selected:', value);
+                label.setAttribute('data-selected-value', value); // Store value
+                selectElement.classList.remove('active');
             });
         });
+    }
 
-        // Close on outside click
-        document.addEventListener('click', (e) => {
-            if (!customSelect.contains(e.target)) {
-                 customSelect.classList.remove('active');
-            }
-            // Search Input Redirect (Home Page)
+    // Initialize all custom selects
+    document.querySelectorAll('.custom-select').forEach(setupCustomSelect);
+
+    // Global click to close selects
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.custom-select')) {
+             document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
+        }
+    });
+
+    // Search Input Redirect (Home Page)
     const searchInput = document.querySelector('.nav-input.search-grow');
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -85,8 +92,101 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-});
+
+    // Share Modal Logic
+    const shareModal = document.getElementById('share-modal');
+    const fabBtn = document.getElementById('fab-share-btn');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const shareForm = document.getElementById('share-item-form');
+
+    if (shareModal && fabBtn && closeModalBtn) {
+        // Open Modal
+        fabBtn.addEventListener('click', () => {
+            shareModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+
+        // Close Modal
+        function closeShareModal() {
+            shareModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        closeModalBtn.addEventListener('click', closeShareModal);
+
+        // Close on outside click
+        shareModal.addEventListener('click', (e) => {
+            if (e.target === shareModal) closeShareModal();
+        });
+
+        // Form Submit
+        if (shareForm) {
+            shareForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Gather Data
+                const itemName = shareForm.querySelector('[name="itemName"]').value;
+                const itemPrice = shareForm.querySelector('[name="itemPrice"]').value;
+                const itemExpiry = shareForm.querySelector('[name="itemExpiry"]').value;
+                const itemLocation = shareForm.querySelector('[name="itemLocation"]').value;
+                
+                // Get Category from custom select
+                const categoryLabel = document.getElementById('form-category-label');
+                const category = categoryLabel.getAttribute('data-selected-value');
+
+                if (!category) {
+                    alert('Please select a category');
+                    return;
+                }
+
+                // Create Item Object
+                const newItem = {
+                    id: Date.now(), // Simple unique ID
+                    name: itemName,
+                    category: category,
+                    owner: "You", // Default owner for now
+                    price: parseFloat(itemPrice),
+                    available: true,
+                    location: itemLocation,
+                    expiryDate: itemExpiry,
+                    // Image would normally be uploaded to a server. 
+                    // For now, we'll placeholder or leave mock logic if available.
+                };
+
+                // Add to Global Items (Mock Backend)
+                if (window.allItems) {
+                    window.allItems.unshift(newItem); // Add to beginning
+                    
+                    // Save to LocalStorage for persistence across pages
+                    const storedItems = JSON.parse(localStorage.getItem('userSharedItems') || '[]');
+                    storedItems.unshift(newItem);
+                    localStorage.setItem('userSharedItems', JSON.stringify(storedItems));
+
+                    console.log('New Item Added & Saved:', newItem);
+                    
+                    // Re-render if possible (if on all-items page or if we want to show it somewhere)
+                    if (window.renderItems) {
+                        window.renderItems();
+                    }
+                    
+                    alert('Item Shared Successfully!');
+                    shareForm.reset();
+                    categoryLabel.textContent = 'Select Category';
+                    categoryLabel.removeAttribute('data-selected-value');
+                    closeShareModal();
+                    
+                    // Optional: Navigate to All Items to see it?
+                    // window.location.href = 'all-items.html';
+                } else {
+                    console.error('Window.allItems not found. Is all-items.js loaded?');
+                    // Fallback for demo if all-items isn't loaded on this page
+                     alert('Item ready to process for backend!\n' + JSON.stringify(newItem, null, 2));
+                     closeShareModal();
+                }
+            });
+        }
     }
+
 
     // Settings Menu Interaction
     const settingsBtn = document.getElementById('settings-btn');
