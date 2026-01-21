@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SajhaShare | Lend & Borrow Anything</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="#" class="logo-link">
+        <img src="logo.png" alt="SajhaShare" class="logo-img">
+      </a>
+
+      <!-- Left side empty or could hold nav links if desired, but user said remove text on top left (logo text) -->
+
+      <div class="nav-actions">
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+          <!-- Icon set by JS -->
+        </button>
+
+        <!-- Icons replacing buttons/text -->
+        <a href="#" class="icon-link" aria-label="How it Works" title="How it Works">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-help-circle">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </a>
+
+        <a href="#" class="icon-link" aria-label="Safety" title="Safety">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-shield">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="container hero-container">
+      <div class="hero-visual">
+        <spline-viewer url="https://prod.spline.design/SSzs99qxSuMyX5Dz/scene.splinecode"></spline-viewer>
+      </div>
+      <div class="hero-content">
+        <h1>Lend Everything.<br><span class="gradient-text">Borrow Anything.</span></h1>
+        <p>The trusted community marketplace for lending and borrowing items. Save money, reduce waste, and connect with
+          your neighbors.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="location.href='register.html'">Start Borrowing</button>
+          <button class="btn btn-outline">List an Item</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Marquee -->
+  <section class="features-section">
+    <div class="marquee-container">
+      <div class="marquee-content">
+        <div class="marquee-item">Electronics</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Tools</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Books</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Camping Gear</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Photography</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Musical Instruments</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Sports Equipment</div>
+        <div class="marquee-item">•</div>
+        <!-- Duplicate for seamless loop -->
+        <div class="marquee-item">Electronics</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Tools</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Books</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Camping Gear</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Photography</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Musical Instruments</div>
+        <div class="marquee-item">•</div>
+        <div class="marquee-item">Sports Equipment</div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
