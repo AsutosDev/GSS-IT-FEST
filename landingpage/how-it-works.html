@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How it Works | SajhaShare</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo-link">
+                <img src="logo.png" alt="SajhaShare" class="logo-img">
+            </a>
+
+            <div class="nav-actions">
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+                    <!-- Icon set by JS -->
+                </button>
+
+                <!-- Icons -->
+                <a href="how-it-works.html" class="icon-link active-link" aria-label="How it Works"
+                    title="How it Works">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-help-circle">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </a>
+
+                <a href="security.html" class="icon-link" aria-label="Safety" title="Safety">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-shield">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Simple. Secure. <span class="gradient-text">Sustainable.</span></h1>
+            <p class="subtitle">Join the borrowing revolution in 3 easy steps.</p>
+        </div>
+    </header>
+
+    <!-- Steps Section -->
+    <section class="steps-section">
+        <div class="container">
+            <div class="steps-grid">
+                <!-- Step 1 -->
+                <div class="info-card">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <h3>1. Find</h3>
+                    <p>Search for the items you need in your local community. From power tools to camping gear, find it
+                        all nearby.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="info-card">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3>2. Connect</h3>
+                    <p>Chat securely with the lender, agree on a time, and arrange the pickup. Our platform keeps your
+                        data safe.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="info-card">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                    </div>
+                    <h3>3. Enjoy & Return</h3>
+                    <p>Use the item for your project or trip, then return it in the same condition. Build your
+                        reputation score!</p>
+                </div>
+            </div>
+
+            <div class="cta-box">
+                <h2>Ready to start?</h2>
+                <div class="hero-btns" style="justify-content: center;">
+                    <button class="btn btn-primary" onclick="location.href='register.html'">Join Community</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
