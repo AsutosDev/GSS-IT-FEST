@@ -1,104 +1,26 @@
+import { db } from '../firebase-config.js';
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
 // All Items Page Logic
-document.addEventListener('DOMContentLoaded', () => {
-    // Sample item data (you can replace this with actual data)
-    const items = [
-        { id: 1, name: "Sports Bag", category: "Bag", owner: "John D.", price: 5, available: true },
-        { id: 2, name: "Baseball Bat", category: "Bat", owner: "Sarah M.", price: 8, available: true },
-        { id: 3, name: "Soccer Ball", category: "Ball", owner: "Mike W.", price: 3, available: false },
-        { id: 4, name: "Tennis Ball Set", category: "Ball", owner: "Emma L.", price: 4, available: true },
-        { id: 5, name: "Designer Skirt", category: "Skirt", owner: "Lisa K.", price: 12, available: true },
-        { id: 6, name: "Baseball Cap", category: "Cap", owner: "Tom H.", price: 6, available: true },
-        { id: 7, name: "Winter Gloves", category: "Gloves", owner: "Anna P.", price: 7, available: true },
-        { id: 8, name: "Travel Bag", category: "Bag", owner: "David S.", price: 10, available: true },
-        { id: 9, name: "Cricket Bat", category: "Bat", owner: "James R.", price: 15, available: false },
-        { id: 10, name: "Basketball", category: "Ball", owner: "Chris B.", price: 5, available: true },
-        { id: 11, name: "Leather Bag", category: "Bag", owner: "Sophie T.", price: 20, available: true },
-        { id: 12, name: "Softball Bat", category: "Bat", owner: "Ryan G.", price: 12, available: true },
-        { id: 13, name: "Vintage Cap", category: "Cap", owner: "Olivia F.", price: 8, available: true },
-        { id: 14, name: "Summer Skirt", category: "Skirt", owner: "Mia C.", price: 15, available: true },
-        { id: 15, name: "Boxing Gloves", category: "Gloves", owner: "Noah A.", price: 18, available: false },
-        { id: 16, name: "Gym Bag", category: "Bag", owner: "Ella N.", price: 9, available: true },
-        { id: 17, name: "Football", category: "Ball", owner: "Liam V.", price: 6, available: true },
-        { id: 18, name: "Trucker Cap", category: "Cap", owner: "Ava M.", price: 5, available: true },
-        { id: 19, name: "Pleated Skirt", category: "Skirt", owner: "Sophia W.", price: 14, available: true },
-        { id: 20, name: "Cycling Gloves", category: "Gloves", owner: "Mason J.", price: 10, available: true },
-    ];
+document.addEventListener('DOMContentLoaded', async () => {
+    let items = [];
 
-    // Expanded Data Generation
-    const navbarCategories = ["Tools", "Vehicles", "Books", "Camping", "Music", "Camera", "Electronics", "Services"];
-    const existingCategories = ["Bag", "Bat", "Ball", "Skirt", "Cap", "Gloves"];
-    
-    // Combine for random generation
-    const allCategories = [...existingCategories, ...navbarCategories];
-
-    // Helper for random names for new categories
-    const newCategoryNames = {
-        "Tools": ["Power Drill", "Hammer Set", "Wrench Kit", "Ladder", "Screwdriver Set"],
-        "Vehicles": ["Mountain Bike", "Electric Scooter", "Roof Rack", "Car Trailer"],
-        "Books": ["Sci-Fi Novel", "Textbook", "Cookbook", "History Book", "Biography"],
-        "Camping": ["Tent 4-Person", "Sleeping Bag", "Portable Stove", "Camping Chair", "Cooler Box"],
-        "Music": ["Acoustic Guitar", "Keyboard", "Microphone", "DJ Controller", "Ukulele"],
-        "Camera": ["DSLR Camera", "GoPro Hero", "Tripod", "Camera Lens", "Ring Light"],
-        "Electronics": ["Projector", "Bluetooth Speaker", "Tablet", "Power Bank", "VR Headset"],
-        "Services": ["Cleaning", "Gardening", "Moving Help", "Photography", "Tutoring"]
-    };
-
-    // Generate random mock data
-    const locations = ["New York, NY", "Brooklyn, NY", "Jersey City, NJ", "Queens, NY", "Manhattan, NY"];
-    
-    // Helper to get random date in future
-    function getRandomExpiry() {
-        const date = new Date();
-        date.setDate(date.getDate() + Math.floor(Math.random() * 30) + 1); // 1-30 days future
-        return date.toISOString().split('T')[0];
-    }
-
-    // Generate items
-    for (let i = 21; i <= 150; i++) { 
-        const category = allCategories[Math.floor(Math.random() * allCategories.length)];
-        let itemName;
-
-        if (existingCategories.includes(category)) {
-             const names = {
-                "Bag": ["Backpack", "Duffel Bag", "Tote Bag", "Messenger Bag", "Laptop Bag"],
-                "Bat": ["Wooden Bat", "Metal Bat", "Cricket Bat", "Training Bat"],
-                "Ball": ["Volleyball", "Rugby Ball", "Golf Balls", "Ping Pong Balls"],
-                "Skirt": ["Mini Skirt", "Maxi Skirt", "Denim Skirt", "Pencil Skirt"],
-                "Cap": ["Snapback", "Beanie", "Fedora", "Sun Hat"],
-                "Gloves": ["Leather Gloves", "Wool Gloves", "Gardening Gloves", "Work Gloves"]
-            };
-            const nameOptions = names[category];
-            itemName = nameOptions[Math.floor(Math.random() * nameOptions.length)] + " #" + i;
-        } else {
-            const nameOptions = newCategoryNames[category];
-            itemName = nameOptions[Math.floor(Math.random() * nameOptions.length)] + " #" + i;
+    // Fetch items from Firestore
+    try {
+        const querySnapshot = await getDocs(collection(db, "items"));
+        querySnapshot.forEach((doc) => {
+            items.push({ id: doc.id, ...doc.data() });
+        });
+        
+        // If no items in DB, fallback to some sample data or empty
+        if (items.length === 0) {
+            console.log("No items found in DB.");
         }
-        
-        const owners = ["Alex K.", "Sam P.", "Jordan L.", "Taylor M.", "Casey R.", "Jamie D.", "Morgan B."];
-        
-        items.push({
-            id: i,
-            name: itemName,
-            category: category,
-            owner: owners[Math.floor(Math.random() * owners.length)],
-            price: Math.floor(Math.random() * 50) + 5,
-            available: Math.random() > 0.2,
-            location: locations[Math.floor(Math.random() * locations.length)],
-            expiryDate: getRandomExpiry()
-        });
+    } catch (e) {
+        console.error("Error fetching documents: ", e);
     }
 
-    // Load User Shared Items from LocalStorage
-    const storedItems = JSON.parse(localStorage.getItem('userSharedItems') || '[]');
-    if (storedItems.length > 0) {
-        // Add stored items to the beginning of the list
-        storedItems.forEach(item => {
-            // Ensure no duplicate IDs if possible, or just push
-            items.unshift(item);
-        });
-    }
-
-    // Expose items to global scope for Share Modal
+    // Expose items to global scope
     window.allItems = items;
 
     const container = document.getElementById('items-container');

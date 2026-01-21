@@ -1,3 +1,6 @@
+import { db } from '../firebase-config.js';
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     // Brand Slider Interaction
     const brandItems = document.querySelectorAll('.brand-item');
@@ -119,9 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target === shareModal) closeShareModal();
         });
 
-        // Form Submit
         if (shareForm) {
-            shareForm.addEventListener('submit', (e) => {
+            shareForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 // Gather Data
@@ -153,35 +155,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     // For now, we'll placeholder or leave mock logic if available.
                 };
 
-                // Add to Global Items (Mock Backend)
-                if (window.allItems) {
-                    window.allItems.unshift(newItem); // Add to beginning
-                    
-                    // Save to LocalStorage for persistence across pages
-                    const storedItems = JSON.parse(localStorage.getItem('userSharedItems') || '[]');
-                    storedItems.unshift(newItem);
-                    localStorage.setItem('userSharedItems', JSON.stringify(storedItems));
-
-                    console.log('New Item Added & Saved:', newItem);
-                    
-                    // Re-render if possible (if on all-items page or if we want to show it somewhere)
-                    if (window.renderItems) {
-                        window.renderItems();
-                    }
+                // Add to Firestore
+                try {
+                    const docRef = await addDoc(collection(db, "items"), newItem);
+                    console.log("Document written with ID: ", docRef.id);
                     
                     alert('Item Shared Successfully!');
                     shareForm.reset();
                     categoryLabel.textContent = 'Select Category';
                     categoryLabel.removeAttribute('data-selected-value');
                     closeShareModal();
-                    
-                    // Optional: Navigate to All Items to see it?
-                    // window.location.href = 'all-items.html';
-                } else {
-                    console.error('Window.allItems not found. Is all-items.js loaded?');
-                    // Fallback for demo if all-items isn't loaded on this page
-                     alert('Item ready to process for backend!\n' + JSON.stringify(newItem, null, 2));
-                     closeShareModal();
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                    alert("Error sharing item: " + e.message);
                 }
             });
         }
