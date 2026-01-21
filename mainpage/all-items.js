@@ -47,9 +47,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (searchQuery) {
             const lowerQuery = searchQuery.toLowerCase();
             filteredItems = filteredItems.filter(item => 
-                item.name.toLowerCase().includes(lowerQuery) || 
-                item.category.toLowerCase().includes(lowerQuery) ||
-                item.owner.toLowerCase().includes(lowerQuery) ||
+                (item.name && item.name.toLowerCase().includes(lowerQuery)) || 
+                (item.category && item.category.toLowerCase().includes(lowerQuery)) ||
+                (item.owner && item.owner.toLowerCase().includes(lowerQuery)) ||
                 (item.location && item.location.toLowerCase().includes(lowerQuery))
             );
         }
