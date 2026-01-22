@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security - Unique</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="settings_styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="page-background">
+        <main class="main-card">
+            <!-- Header with Back Button -->
+            <header class="header" style="margin-bottom: 20px;">
+                <a href="index.html" class="btn-icon-only">
+                    <i data-lucide="arrow-left"></i> Back
+                </a>
+            </header>
+
+            <!-- Page Header -->
+            <div class="page-header" style="padding-top: 40px;">
+                <h1 style="font-size: 3rem;">Security <span
+                        style="background: linear-gradient(to right, #4f46e5, #ec4899); -webkit-background-clip: text; color: transparent;">Settings</span>
+                </h1>
+                <p class="subtitle">Keep your account safe with our advanced security features.</p>
+            </div>
+
+            <!-- Content Grid -->
+            <section class="steps-section">
+                <div class="steps-grid">
+                    <!-- Password -->
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i data-lucide="lock"></i>
+                        </div>
+                        <h3>Password</h3>
+                        <p>Change your password regularly to keep your account secure.</p>
+                    </div>
+
+                    <!-- 2FA -->
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i data-lucide="smartphone"></i>
+                        </div>
+                        <h3>Two-Factor Auth</h3>
+                        <p>Add an extra layer of security your account by enabling 2FA.</p>
+                    </div>
+
+                    <!-- Login Activity -->
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i data-lucide="activity"></i>
+                        </div>
+                        <h3>Login Activity</h3>
+                        <p>Monitor active sessions and log out from unrecognized devices.</p>
+                    </div>
+                </div>
+
+                <div class="cta-box">
+                    <h2>Found a vulnerability?</h2>
+                    <p style="margin-bottom: 20px; color: #666;">Report it to our security team and get rewarded.</p>
+                    <button class="btn btn-black btn-pill">Report Issue</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="background-3d.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

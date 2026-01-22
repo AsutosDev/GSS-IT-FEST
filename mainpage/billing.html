@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing - Unique</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="settings_styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="page-background">
+        <main class="main-card">
+            <!-- Header with Back Button -->
+            <header class="header" style="margin-bottom: 20px;">
+                <a href="index.html" class="btn-icon-only">
+                    <i data-lucide="arrow-left"></i> Back
+                </a>
+            </header>
+
+            <!-- Page Header -->
+            <div class="page-header" style="padding-top: 40px;">
+                <h1 style="font-size: 3rem;">Billing & <span
+                        style="background: linear-gradient(to right, #4f46e5, #ec4899); -webkit-background-clip: text; color: transparent;">Payments</span>
+                </h1>
+                <p class="subtitle">Manage your payment methods and view your transaction history.</p>
+            </div>
+
+            <!-- Content Grid -->
+            <section class="steps-section">
+                <div class="steps-grid">
+                    <!-- Payment Methods -->
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i data-lucide="credit-card"></i>
+                        </div>
+                        <h3>Payment Methods</h3>
+                        <p>Manage your saved credit cards and bank accounts. Secure and encrypted.</p>
+                    </div>
+
+                    <!-- Invoice History -->
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <h3>Transaction History</h3>
+                        <p>View and download invoices for all your past rentals and purchases.</p>
+                    </div>
+
+                    <!-- Credits -->
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i data-lucide="gift"></i>
+                        </div>
+                        <h3>Credits & Promos</h3>
+                        <p>Check your available credits and apply promo codes for discounts.</p>
+                    </div>
+                </div>
+
+                <div class="cta-box">
+                    <h2>Need help with a charge?</h2>
+                    <p style="margin-bottom: 20px; color: #666;">Our billing support team is here to assist you.</p>
+                    <button class="btn btn-black btn-pill">Contact Billing Support</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="background-3d.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
