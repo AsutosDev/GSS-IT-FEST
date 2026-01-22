@@ -1,4 +1,8 @@
 // All Items Page Logic
+import { db, auth } from "./firebase.js";
+import { collection, addDoc, getDocs, query, where, doc, updateDoc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     // Sample item data (you can replace this with actual data)
     const items = [
@@ -97,15 +101,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Load User Shared Items from LocalStorage
-    const storedItems = JSON.parse(localStorage.getItem('userSharedItems') || '[]');
-    if (storedItems.length > 0) {
-        // Add stored items to the beginning of the list
-        storedItems.forEach(item => {
-            // Ensure no duplicate IDs if possible, or just push
-            items.unshift(item);
-        });
+    // Load items from Firestore
+    async function loadItems() {
+        try {
+            const itemsCol = collection(db, "items");
+            const snapshot = await getDocs(itemsCol);
+            const dbItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Combine with mock items for a full experience if needed, 
+            // but prioritize real DB items
+            window.allItems = [...dbItems, ...items];
+            renderItems(window.currentFilter, window.currentSearchQuery, window.currentLocationQuery);
+        } catch (e) {
+            console.error("Error loading items from Firestore:", e);
+            window.allItems = items;
+            renderItems(window.currentFilter, window.currentSearchQuery, window.currentLocationQuery);
+        }
     }
+
+    loadItems();
 
     // Load Rented Items status from LocalStorage to update availability
     const rentedItems = JSON.parse(localStorage.getItem('userRentedItems') || '[]');
@@ -511,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target === modal) closeModal();
         });
 
-        rentBtn.addEventListener('click', () => {
+        rentBtn.addEventListener('click', async () => {
             const rName = document.getElementById('renter-name').value.trim();
             const rEmail = document.getElementById('renter-email').value.trim();
 
@@ -530,22 +544,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemOwnerName = document.getElementById('modal-item-owner').textContent;
             const itemCategory = document.getElementById('modal-item-category-badge').textContent;
             
+            // Re-find the actual item object to get its IDs
+            const currentItem = window.allItems.find(i => i.name === itemName && (i.ownerName === itemOwnerName || i.owner === itemOwnerName));
+            
+            const user = auth.currentUser;
+
             // Create Standardized Rental Record (Firebase Ready)
-            const rentalId = `rent_${Date.now()}`;
             const rentalData = {
-                id: rentalId,
-                itemId: "item_placeholder_uid", // Should be passed from the item object
-                ownerId: "owner_placeholder_uid",
-                renterId: "current_user_uid",
+                itemId: currentItem ? currentItem.id : "placeholder",
+                ownerId: currentItem ? currentItem.ownerId : "placeholder",
+                ownerEmail: currentItem ? (currentItem.ownerEmail || currentItem.email) : "placeholder",
+                renterId: user ? user.uid : "placeholder",
+                renterName: rName,
+                renterEmail: rEmail,
                 status: "pending",
                 item: {
                     name: itemName,
                     price: parseFloat(itemPrice.replace('$', '')),
                     category: itemCategory
-                },
-                renter: {
-                    name: rName,
-                    email: rEmail
                 },
                 dates: {
                     start: startDateInput.value,
@@ -554,34 +570,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 createdAt: new Date().toISOString()
             };
             
-            // Create standardized notification object
-            const notif = {
-                id: `notif_${Date.now()}`,
-                type: 'rental_request',
-                status: 'pending',
-                title: 'New Rental Request!',
-                text: `${rName} (${rEmail}) wants to rent your "${itemName}" from ${startDateInput.value} to ${endDateInput.value}.`,
-                item: { name: itemName },
-                renter: { name: rName, email: rEmail },
-                data: rentalData, // The full record for acceptance
-                timestamp: new Date().toISOString()
-            };
+            try {
+                // Save to Firestore
+                const docRef = await addDoc(collection(db, "rentals"), rentalData);
+                console.log("Rental record created: ", docRef.id);
 
-            const notifs = JSON.parse(localStorage.getItem('userNotifications') || '[]');
-            notifs.unshift(notif);
-            localStorage.setItem('userNotifications', JSON.stringify(notifs));
+                // Create standardized notification object (still using localStorage for UI if needed, or we could use Firestore)
+                const notif = {
+                    id: `notif_${Date.now()}`,
+                    type: 'rental_request',
+                    status: 'pending',
+                    title: 'New Rental Request!',
+                    text: `${rName} (${rEmail}) wants to rent your "${itemName}" from ${startDateInput.value} to ${endDateInput.value}.`,
+                    item: { name: itemName },
+                    renter: { name: rName, email: rEmail },
+                    data: { id: docRef.id, ...rentalData }, 
+                    timestamp: new Date().toISOString()
+                };
 
-            alert('Rental request sent! 📩\n\nThe owner needs to accept your request. You can check the notification in the bell icon.');
-            
-            // Update the badge if updateNotifBadge exists (it's in script.js)
-            if (typeof updateNotifBadge === 'function') {
-                updateNotifBadge();
-            } else {
-                // Refresh to show badge if we can't call directly
-                window.location.reload();
+                const notifs = JSON.parse(localStorage.getItem('userNotifications') || '[]');
+                notifs.unshift(notif);
+                localStorage.setItem('userNotifications', JSON.stringify(notifs));
+
+                alert('Rental request sent! 📩\n\nThe owner needs to accept your request. You can check the notification in the bell icon.');
+                
+                if (typeof updateNotifBadge === 'function') {
+                    updateNotifBadge();
+                }
+                
+                closeModal();
+            } catch (e) {
+                console.error("Error saving rental: ", e);
+                alert("Error sending rental request: " + e.message);
             }
-            
-            closeModal();
         });
     }
 

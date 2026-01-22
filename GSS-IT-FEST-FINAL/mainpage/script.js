@@ -1,5 +1,5 @@
-import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, query, orderBy } 
+import { db, auth } from "./firebase.js";
+import { collection, addDoc, getDocs, query, orderBy, where } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -223,9 +223,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 // Create Standardized Item Object (Firebase Ready)
                 const now = new Date().toISOString();
+                const user = auth.currentUser;
+                
                 const newItem = {
-                    ownerId: "user_placeholder_123", // Ready for Firebase Auth UID
-                    ownerName: "You",
+                    ownerId: user ? user.uid : "user_placeholder_123",
+                    ownerName: user ? (user.displayName || "You") : "You",
+                    ownerEmail: user ? user.email : itemEmail,
                     name: itemName,
                     category: category,
                     price: parseFloat(itemPrice),

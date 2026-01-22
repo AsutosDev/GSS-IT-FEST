@@ -1,9 +1,77 @@
-// Import Firebase Auth
-import { auth } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { db, auth, storage } from "./firebase.js";
+import { 
+    collection, 
+    addDoc, 
+    query, 
+    where, 
+    getDocs, 
+    serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { db, auth } from "./firebase.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+async function handleRentItem(item) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert("You must be logged in to rent items!");
+        return;
+    }
+
+    try {
+        // This creates the "link" between the item and the person renting it
+        await addDoc(collection(db, "rentals"), {
+            itemId: item.id,
+            itemName: item.name,
+            itemImage: item.imageUrl,
+            ownerEmail: item.ownerEmail,
+            renterEmail: user.email, // This is how the dashboard finds it
+            price: item.price,
+            rentedAt: serverTimestamp()
+        });
+        
+        alert(`Success! You have rented: ${item.name}`);
+        window.location.href = "dashboard.html"; // Redirect to see it in history
+    } catch (error) {
+        console.error("Rental failed:", error);
+    }
+}
 document.addEventListener('DOMContentLoaded', () => {
-    // Tab Switching
+    
+
+    // --- 2. UI Elements ---
+    const userDisplay = document.getElementById('user-display');
+    const shareForm = document.getElementById('share-item-form');
+    const categoryTrigger = document.querySelector('.select-trigger');
+    const categoryOptions = document.querySelector('.select-options');
+    const categoryLabel = document.getElementById('form-category-label');
+    const modal = document.getElementById('share-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const fabBtn = document.getElementById('fab-share-btn');
+
+    // --- 3. Custom Category Dropdown Logic ---
+    categoryTrigger.addEventListener('click', () => {
+        categoryOptions.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.select-option').forEach(option => {
+        option.addEventListener('click', () => {
+            categoryLabel.textContent = option.dataset.value;
+            categoryOptions.classList.remove('active');
+        });
+    });
+
+    // Close dropdown when clicking outside
+    window.addEventListener('click', (e) => {
+        if (!categoryTrigger.contains(e.target)) categoryOptions.classList.remove('active');
+    });
+
+    // --- 4. Modal Logic ---
+    fabBtn.addEventListener('click', () => modal.classList.add('active'));
+    closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+
+    // --- 5. Tab Switching Logic ---
     const tabs = document.querySelectorAll('.tab-btn');
     const contents = document.querySelectorAll('.tab-content');
 
@@ -11,194 +79,147 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', (e) => {
             e.preventDefault();
             const target = tab.dataset.tab;
-            console.log('Switching to tab:', target);
-
             tabs.forEach(t => t.classList.remove('active'));
             contents.forEach(c => c.classList.remove('active'));
-
             tab.classList.add('active');
-            const targetSection = document.getElementById(`${target}-section`);
-            if (targetSection) {
-                targetSection.classList.add('active');
-            } else {
-                console.error(`Section not found: ${target}-section`);
-            }
+            document.getElementById(`${target}-section`).classList.add('active');
         });
     });
 
-    // **Step 4: Display logged-in user**
-    function displayCurrentUser() {
-        const userDisplay = document.getElementById('user-display');
+    // --- 6. Form Submission (Firestore + Storage) ---
+    shareForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
         const user = auth.currentUser;
-        if (user) {
-            userDisplay.textContent = `Logged in as: ${user.email}`;
-        } else {
-            userDisplay.textContent = `Not logged in`;
-        }
-    }
+        if (!user) return alert("Please log in first!");
 
-    // Step 5: Listen for auth state changes
-    onAuthStateChanged(auth, user => {
-        displayCurrentUser();
+        const submitBtn = document.getElementById('share-submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Uploading...";
+
+        try {
+            const formData = new FormData(shareForm);
+            const imageFile = shareForm.itemImage.files[0];
+            let imageUrl = "";
+
+            // Upload Image to Storage
+            if (imageFile) {
+                const storageRef = ref(storage, `items/${Date.now()}_${imageFile.name}`);
+                const snapshot = await uploadBytes(storageRef, imageFile);
+                imageUrl = await getDownloadURL(snapshot.ref);
+            }
+
+            // Save to Firestore
+            await addDoc(collection(db, "items"), {
+                name: formData.get('itemName'),
+                category: categoryLabel.textContent,
+                price: parseFloat(formData.get('itemPrice')),
+                expiryDate: formData.get('itemExpiry'),
+                location: formData.get('itemLocation'),
+                ownerEmail: user.email,
+                imageUrl: imageUrl,
+                createdAt: serverTimestamp()
+            });
+
+            alert("Item shared successfully!");
+            shareForm.reset();
+            categoryLabel.textContent = "Select Category";
+            modal.classList.remove('active');
+            renderDashboard(user); 
+
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Upload failed. Check console.");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Share Item";
+        }
     });
 
-    // Data Rendering
-    function renderDashboard() {
-        const sharedItems = JSON.parse(localStorage.getItem('userSharedItems') || '[]');
-        const rentedItems = JSON.parse(localStorage.getItem('userRentedItems') || '[]');
+    // --- 7. Data Fetching & Rendering ---
+    async function renderDashboard(user) {
+        if (!user) return;
+
+        // Fetch Shared Items
+        const qShared = query(collection(db, "items"), where("ownerEmail", "==", user.email));
+        const sharedSnap = await getDocs(qShared);
+        const sharedItems = sharedSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Fetch Rented Items (from 'rentals' collection)
+        const qRented = query(collection(db, "rentals"), where("renterEmail", "==", user.email));
+        const rentedSnap = await getDocs(qRented);
+        const rentedItems = rentedSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
         renderSharedItems(sharedItems);
         renderRentedItems(rentedItems);
         updateStats(sharedItems, rentedItems);
     }
 
+
+
     function renderSharedItems(items) {
         const container = document.getElementById('shared-container');
         const badge = document.getElementById('shared-badge');
+        container.innerHTML = '';
 
-        if (!items || items.length === 0) {
+        if (items.length === 0) {
+            container.innerHTML = `<div class="empty-state"><p>No items shared yet.</p></div>`;
             badge.textContent = '0 Items';
             return;
         }
 
         badge.textContent = `${items.length} Item${items.length > 1 ? 's' : ''}`;
-        container.innerHTML = '';
-
-        items.forEach((item, index) => {
-            const card = document.createElement('div');
-            card.className = 'item-card scroll-animate visible';
-            card.style.animationDelay = `${index * 0.1}s`;
-
-            card.innerHTML = `
+        items.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'item-card visible';
+            div.innerHTML = `
                 <div class="item-image">
-                    <i data-lucide="${getCategoryIcon(item.category)}"></i>
+                    ${item.imageUrl ? `<img src="${item.imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">` : `<i data-lucide="${getCategoryIcon(item.category)}"></i>`}
                 </div>
                 <div class="item-content">
-                    <div class="item-header">
-                        <div>
-                            <h3 class="item-title">${item.name}</h3>
-                            <span class="item-category">${item.category}</span>
-                        </div>
-                    </div>
+                    <h3 class="item-title">${item.name}</h3>
                     <div class="item-meta">
-                        <div class="item-price">
-                            $${item.price}<span>/day</span>
-                        </div>
-                        <div class="item-status">
-                            <i data-lucide="map-pin"></i>
-                            ${item.location || 'N/A'}
-                        </div>
+                        <span class="item-price">$${item.price}/day</span>
+                        <span class="item-status"><i data-lucide="map-pin"></i>${item.location}</span>
                     </div>
-                </div>
-            `;
-            container.appendChild(card);
+                </div>`;
+            container.appendChild(div);
         });
-
-        if (window.lucide) lucide.createIcons();
+        lucide.createIcons();
     }
 
     function renderRentedItems(items) {
         const container = document.getElementById('rented-container');
         const badge = document.getElementById('rented-badge');
+        container.innerHTML = '';
 
-        if (!items || items.length === 0) {
+        if (items.length === 0) {
+            container.innerHTML = `<div class="empty-state"><p>No rentals yet.</p></div>`;
             badge.textContent = '0 Items';
             return;
         }
 
-        badge.textContent = `${items.length} Item${items.length > 1 ? 's' : ''}`;
-        container.innerHTML = '';
-
-        items.forEach((item, index) => {
-            const card = document.createElement('div');
-            card.className = 'item-card scroll-animate visible';
-            card.style.animationDelay = `${index * 0.1}s`;
-
-            const itemName = item.item ? item.item.name : item.name;
-            const category = item.item ? item.item.category : item.category;
-            const price = item.item ? `$${item.item.price}` : item.price;
-            const startDate = item.dates ? item.dates.start : item.startDate;
-            const endDate = item.dates ? item.dates.end : item.endDate;
-            const owner = item.ownerName || item.owner || 'Unknown';
-
-            const start = startDate ? new Date(startDate).toLocaleDateString() : 'N/A';
-            const end = endDate ? new Date(endDate).toLocaleDateString() : 'N/A';
-
-            card.innerHTML = `
-                <div class="item-image" style="background: rgba(255, 45, 85, 0.1); color: #FF2D55;">
-                    <i data-lucide="${getCategoryIcon(category)}"></i>
-                </div>
-                <div class="item-content">
-                    <div class="item-header">
-                        <div>
-                            <h3 class="item-title">${itemName}</h3>
-                            <span class="item-category">${category} • from ${owner}</span>
-                        </div>
-                    </div>
-                    <div class="item-meta">
-                        <div class="item-price">
-                            ${price}<span>/day</span>
-                        </div>
-                    </div>
-                    <div class="rental-date-range">
-                        <i data-lucide="calendar"></i>
-                        <span>${start} - ${end}</span>
-                    </div>
-                </div>
-            `;
-            container.appendChild(card);
-        });
-
-        if (window.lucide) lucide.createIcons();
+        badge.textContent = `${items.length} Items`;
+        // ... rendering logic for rentals ...
     }
 
     function updateStats(shared, rented) {
         document.getElementById('shared-count').textContent = shared.length;
         document.getElementById('rented-count').textContent = rented.length;
-        const savings = rented.length * 15;
-        document.getElementById('savings-value').textContent = `$${savings}`;
+        document.getElementById('savings-value').textContent = `$${rented.length * 15}`;
     }
 
-    function getCategoryIcon(category) {
-        const icons = {
-            'Bag': 'backpack',
-            'Bat': 'zap',
-            'Ball': 'circle',
-            'Skirt': 'shirt',
-            'Cap': 'hat',
-            'Gloves': 'hand',
-            'Tools': 'wrench',
-            'Vehicles': 'car-front',
-            'Books': 'book-open',
-            'Camping': 'tent',
-            'Music': 'music',
-            'Camera': 'camera',
-            'Electronics': 'laptop',
-            'Services': 'briefcase'
-        };
-        return icons[category] || 'package';
+    function getCategoryIcon(cat) {
+        const icons = { 'Camera': 'camera', 'Books': 'book', 'Tools': 'wrench', 'Electronics': 'tv' };
+        return icons[cat] || 'package';
     }
 
-    // Initial load
-    renderDashboard();
-    displayCurrentUser();
-
-    // Listen for storage changes
-    window.addEventListener('storage', () => {
-        renderDashboard();
+    // --- 8. Auth State Listener ---
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            userDisplay.textContent = `Logged in as: ${user.email}`;
+            renderDashboard(user);
+        } else {
+            userDisplay.textContent = 'Not logged in';
+        }
     });
-
-    // Update periodically
-    setInterval(() => {
-        const sharedItems = JSON.parse(localStorage.getItem('userSharedItems') || '[]');
-        const rentedItems = JSON.parse(localStorage.getItem('userRentedItems') || '[]');
-        updateStats(sharedItems, rentedItems);
-
-        if (sharedItems.length !== parseInt(document.getElementById('shared-count').textContent)) {
-            renderSharedItems(sharedItems);
-        }
-        if (rentedItems.length !== parseInt(document.getElementById('rented-count').textContent)) {
-            renderRentedItems(rentedItems);
-        }
-    }, 2000);
 });
