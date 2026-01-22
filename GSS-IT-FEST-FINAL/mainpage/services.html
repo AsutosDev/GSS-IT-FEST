@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Sharehood</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="all-items.css">
+    <link rel="stylesheet" href="settings_styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        a.chip {
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="page-background">
+        <main class="main-card">
+            <header class="header">
+                <div class="logo-container"><img src="assets/logo.png" alt="Logo" class="logo-img"></div>
+                <div class="nav-inputs">
+                    <input type="text" placeholder="Location" class="nav-input">
+                    <input type="text" placeholder="Search for items..." class="nav-input search-grow">
+                </div>
+                <div class="header-actions">
+                    <div class="settings-wrapper">
+                        <button class="btn-icon-only" id="settings-btn"><i data-lucide="settings"></i></button>
+                        <div class="settings-menu" id="settings-menu">
+                            <div class="settings-header">
+                                <h3>Settings</h3>
+                            </div>
+                            <div class="settings-section">
+                                <span class="section-label">Appearance</span>
+                                <div class="setting-row">
+                                    <div class="setting-info"><i data-lucide="moon" class="setting-icon"></i><span>Dark
+                                            Mode</span></div>
+                                    <label class="switch"><input type="checkbox" id="dark-mode-toggle"><span
+                                            class="slider round"></span></label>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="settings-links">
+                                <a href="#" class="menu-link"><i data-lucide="user"></i> Account</a>
+                                <a href="#" class="menu-link logout"><i data-lucide="log-out"></i> Log Out</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notifications-wrapper">
+                        <button class="btn-box" id="notif-btn">
+                            <i data-lucide="bell"></i>
+                            <span class="notif-badge" id="notif-badge">0</span>
+                        </button>
+                        <div class="notif-dropdown" id="notif-dropdown">
+                            <div class="notif-header">
+                                <h3>Notifications</h3>
+                                <button class="clear-notif" id="clear-notif">Clear All</button>
+                            </div>
+                            <div class="notif-list" id="notif-list">
+                                <!-- Notifications will be dynamically added here -->
+                                <div class="notif-empty">No new notifications</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-box" id="profile-btn"><i data-lucide="user"></i></button>
+                </div>
+            </header>
+            <div class="page-header">
+                <a href="index.html" class="back-btn"><i data-lucide="arrow-left"></i><span>Back to Home</span></a>
+                <h1 class="page-title">Services</h1>
+                <p class="page-subtitle">Browse our collection of available services</p>
+            </div>
+            <div class="filter-section">
+                <div class="filter-chips">
+                    <a href="tools.html" class="chip">Tools</a>
+                    <a href="vehicles.html" class="chip">Vehicles</a>
+                    <a href="cars.html" class="chip">Cars</a>
+                    <a href="books.html" class="chip">Books</a>
+                    <a href="camping.html" class="chip">Camping</a>
+                    <a href="music.html" class="chip">Music</a>
+                    <a href="camera.html" class="chip">Camera</a>
+                    <a href="electronics.html" class="chip">Electronics</a>
+                    <a href="services.html" class="chip active">Services</a>
+                </div>
+                <div class="sort-controls">
+
+                    <button class="view-toggle active" data-view="grid"><i data-lucide="grid-3x3"></i></button>
+                    <button class="view-toggle" data-view="list"><i data-lucide="list"></i></button>
+                </div>
+            </div>
+            <div class="items-grid" id="items-container"></div>
+        </main>
+    </div>
+
+    <!-- Share Item Modal -->
+    <div class="modal-overlay" id="share-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Share Your Item</h3>
+                <button class="close-modal" id="close-modal-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="share-item-form">
+                <div class="form-group">
+                    <label class="form-label">Item Name</label>
+                    <input type="text" class="form-input" name="itemName" required
+                        placeholder="e.g., Canon DSLR Camera">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <div class="custom-select form-select">
+                        <div class="select-trigger form-input">
+                            <span class="select-label" id="form-category-label">Select Category</span>
+                            <i data-lucide="chevron-down" class="select-icon"></i>
+                        </div>
+                        <div class="select-options">
+                            <div class="select-option" data-value="Camera">Camera</div>
+                            <div class="select-option" data-value="Tools">Tools</div>
+                            <div class="select-option" data-value="Vehicles">Vehicles</div>
+                            <div class="select-option" data-value="Cars">Cars</div>
+                            <div class="select-option" data-value="Camping">Camping</div>
+                            <div class="select-option" data-value="Books">Books</div>
+                            <div class="select-option" data-value="Music">Music</div>
+                            <div class="select-option" data-value="Electronics">Electronics</div>
+                            <div class="select-option" data-value="Bag">Bag</div>
+                            <div class="select-option" data-value="Services">Services</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Price ($/day)</label>
+                    <input type="number" class="form-input" name="itemPrice" required placeholder="0.00" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expiry Date</label>
+                    <input type="date" class="form-input" name="itemExpiry" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" name="itemLocation" required placeholder="e.g. New York, NY">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Gmail</label>
+                    <input type="email" class="form-input" name="itemEmail" required placeholder="e.g. user@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Item Image</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" name="itemImage" accept="image/*">
+                        <i data-lucide="upload-cloud" class="file-icon icon-lg"></i>
+                        <span class="file-text">Click to upload image</span>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn" id="share-submit-btn">Share Item</button>
+            </form>
+        </div>
+    </div>
+    <button class="fab-btn" id="fab-share-btn"><span class="fab-tooltip">Share item</span><i
+            data-lucide="plus"></i></button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        lucide.createIcons();
+        window.pageCategory = 'Services'; 
+    </script>
+    <script src="background-3d.js"></script>
+    <script type="module" src="script.js"></script>
+    <script src="all-items.js"></script>
+</body>
+
+</html>

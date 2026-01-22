@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Sharehood</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="settings_styles.css">
+    <link rel="stylesheet" href="all-items.css">
+    <!-- Lucide Icons for simple SVG icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="page-background">
+        <main class="main-card">
+            <!-- Header -->
+            <header class="header">
+                <div class="logo-container">
+                    <img src="assets/logo.png" alt="Logo" class="logo-img">
+                </div>
+
+                <div class="nav-inputs">
+                    <input type="text" placeholder="Location" class="nav-input location-search-input">
+                    <input type="text" placeholder="Search for items..." class="nav-input search-grow">
+                </div>
+                <div class="header-actions">
+                    <div class="settings-wrapper">
+                        <button class="btn-icon-only" id="settings-btn"><i data-lucide="settings"></i></button>
+                        <div class="settings-menu" id="settings-menu">
+                            <div class="settings-header">
+                                <h3>Settings</h3>
+                            </div>
+                            <div class="settings-section">
+                                <span class="section-label">Appearance</span>
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <i data-lucide="moon" class="setting-icon"></i>
+                                        <span>Dark Mode</span>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="dark-mode-toggle">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="settings-section">
+                                <span class="section-label">Preferences</span>
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <i data-lucide="bell" class="setting-icon"></i>
+                                        <span>Notifications</span>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-row interactive">
+                                    <div class="setting-info">
+                                        <i data-lucide="globe" class="setting-icon"></i>
+                                        <span>Language</span>
+                                    </div>
+                                    <span class="setting-value">English <i data-lucide="chevron-right"
+                                            class="chevron-mini"></i></span>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="settings-links">
+                                <a href="#" class="menu-link"><i data-lucide="user"></i> Account</a>
+                                <a href="#" class="menu-link"><i data-lucide="credit-card"></i> Billing</a>
+                                <a href="#" class="menu-link"><i data-lucide="help-circle"></i> Help</a>
+                                <a href="#" class="menu-link logout"><i data-lucide="log-out"></i> Log Out</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notifications-wrapper">
+                        <button class="btn-box" id="notif-btn">
+                            <i data-lucide="bell"></i>
+                            <span class="notif-badge" id="notif-badge">0</span>
+                        </button>
+                        <div class="notif-dropdown" id="notif-dropdown">
+                            <div class="notif-header">
+                                <h3>Notifications</h3>
+                                <button class="clear-notif" id="clear-notif">Clear All</button>
+                            </div>
+                            <div class="notif-list" id="notif-list">
+                                <!-- Notifications will be dynamically added here -->
+                                <div class="notif-empty">No new notifications</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-box" id="profile-btn"><i data-lucide="user"></i></button>
+                </div>
+            </header>
+
+            <!-- Profile Header -->
+            <div class="page-header">
+                <a href="index.html" class="back-btn">
+                    <i data-lucide="arrow-left"></i>
+                    <span>Back to Home</span>
+                </a>
+                <h1 class="page-title">My Profile</h1>
+                <p class="page-subtitle">Manage your account information and preferences</p>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="dashboard-content" style="max-width: 900px; margin: 0 auto;">
+                <!-- Profile Card -->
+                <div class="stat-card" style="padding: 40px; margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; gap: 30px; margin-bottom: 30px;">
+                        <div
+                            style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: 700;">
+                            <i data-lucide="user" style="width: 50px; height: 50px;"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h2 style="font-size: 1.5rem; margin-bottom: 12px; word-break: break-all;"
+                                id="profile-name">user@example.com</h2>
+                            <button class="btn btn-pill"
+                                style="background: var(--primary); color: white; padding: 8px 20px;">
+                                <i data-lucide="edit-2" style="width: 16px; height: 16px;"></i>
+                                Edit Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Information -->
+                <div class="stat-card" style="padding: 30px; margin-bottom: 30px;">
+                    <h3 style="font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="info" style="width: 20px; height: 20px;"></i>
+                        Account Information
+                    </h3>
+                    <div style="display: grid; gap: 20px;">
+                        <div class="setting-row" style="padding: 15px; background: var(--bg); border-radius: 12px;">
+                            <div class="setting-info">
+                                <i data-lucide="mail" class="setting-icon"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Email Address</div>
+                                    <div style="color: var(--text-muted); font-size: 0.9rem;" id="email-display">
+                                        user@example.com</div>
+                                </div>
+                            </div>
+                            <button class="btn-text" style="color: var(--primary);">Change</button>
+                        </div>
+                        <div class="setting-row" style="padding: 15px; background: var(--bg); border-radius: 12px;">
+                            <div class="setting-info">
+                                <i data-lucide="lock" class="setting-icon"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Password</div>
+                                    <div style="color: var(--text-muted); font-size: 0.9rem;">••••••••</div>
+                                </div>
+                            </div>
+                            <button class="btn-text" style="color: var(--primary);">Change</button>
+                        </div>
+                        <div class="setting-row" style="padding: 15px; background: var(--bg); border-radius: 12px;">
+                            <div class="setting-info">
+                                <i data-lucide="phone" class="setting-icon"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Phone Number</div>
+                                    <div style="color: var(--text-muted); font-size: 0.9rem;" id="phone-display">Not set
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn-text" style="color: var(--primary);">Add</button>
+                        </div>
+                        <div class="setting-row" style="padding: 15px; background: var(--bg); border-radius: 12px;">
+                            <div class="setting-info">
+                                <i data-lucide="map-pin" class="setting-icon"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Location</div>
+                                    <div style="color: var(--text-muted); font-size: 0.9rem;" id="location-display">Not
+                                        set</div>
+                                </div>
+                            </div>
+                            <button class="btn-text" style="color: var(--primary);">Add</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Stats -->
+                <div class="stat-card" style="padding: 30px; margin-bottom: 30px;">
+                    <h3 style="font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="activity" style="width: 20px; height: 20px;"></i>
+                        Activity Overview
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
+                        <div style="text-align: center; padding: 20px; background: var(--bg); border-radius: 12px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="items-shared">0
+                            </div>
+                            <div style="color: var(--text-muted); margin-top: 5px;">Items Shared</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: var(--bg); border-radius: 12px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent);" id="items-rented">0
+                            </div>
+                            <div style="color: var(--text-muted); margin-top: 5px;">Items Rented</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: var(--bg); border-radius: 12px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--secondary);" id="total-savings">
+                                $0</div>
+                            <div style="color: var(--text-muted); margin-top: 5px;">Total Savings</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="stat-card" style="padding: 30px;">
+                    <h3 style="font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="zap" style="width: 20px; height: 20px;"></i>
+                        Quick Actions
+                    </h3>
+                    <div style="display: grid; gap: 15px;">
+                        <a href="history.html" class="setting-row interactive"
+                            style="padding: 15px; background: var(--bg); border-radius: 12px; text-decoration: none; color: inherit;">
+                            <div class="setting-info">
+                                <i data-lucide="history" class="setting-icon"></i>
+                                <span>View Dashboard</span>
+                            </div>
+                            <i data-lucide="chevron-right"
+                                style="width: 20px; height: 20px; color: var(--text-muted);"></i>
+                        </a>
+                        <a href="all-items.html" class="setting-row interactive"
+                            style="padding: 15px; background: var(--bg); border-radius: 12px; text-decoration: none; color: inherit;">
+                            <div class="setting-info">
+                                <i data-lucide="package" class="setting-icon"></i>
+                                <span>Browse Items</span>
+                            </div>
+                            <i data-lucide="chevron-right"
+                                style="width: 20px; height: 20px; color: var(--text-muted);"></i>
+                        </a>
+                        <button class="setting-row interactive"
+                            style="padding: 15px; background: var(--bg); border-radius: 12px; border: none; width: 100%; cursor: pointer;"
+                            onclick="document.getElementById('fab-share-btn')?.click()">
+                            <div class="setting-info">
+                                <i data-lucide="plus-circle" class="setting-icon"></i>
+                                <span>Share New Item</span>
+                            </div>
+                            <i data-lucide="chevron-right"
+                                style="width: 20px; height: 20px; color: var(--text-muted);"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="background-3d.js"></script>
+    <script type="module" src="script.js"></script>
+    <script>
+        // Override profile button on profile page to prevent redirect loop
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileBtn = document.getElementById('profile-btn');
+            if (profileBtn) {
+                // Remove the event listener added by script.js and replace with no-op
+                const newProfileBtn = profileBtn.cloneNode(true);
+                profileBtn.parentNode.replaceChild(newProfileBtn, profileBtn);
+                newProfileBtn.addEventListener('click', () => {
+                    console.log('Already on profile page');
+                });
+            }
+        });
+
+        // Load user stats and credentials from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const sharedItems = JSON.parse(localStorage.getItem('userSharedItems') || '[]');
+            const rentedItems = JSON.parse(localStorage.getItem('userRentedItems') || '[]');
+
+            document.getElementById('items-shared').textContent = sharedItems.length;
+            document.getElementById('items-rented').textContent = rentedItems.length;
+
+            const savings = rentedItems.length * 15;
+            document.getElementById('total-savings').textContent = `$${savings}`;
+
+            // Load credentials
+            const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
+
+            const profileName = document.getElementById('profile-name');
+            const emailDisplay = document.getElementById('email-display');
+
+            if (profileName) profileName.textContent = userEmail;
+            if (emailDisplay) emailDisplay.textContent = userEmail;
+        });
+    </script>
+</body>
+
+</html>

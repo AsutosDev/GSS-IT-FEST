@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | SajhaShare</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="../landingpage/index.html" class="logo-link">
+        <img src="logo.png" alt="SajhaShare" class="logo-img">
+      </a>
+
+      <div class="nav-actions">
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+          <!-- Icon set by JS -->
+        </button>
+
+        <!-- Use absolute paths if these files are in landingpage, or relative if copied. 
+             Since we are in loginpage, and we want to go back to landingpage's help/security 
+             if they don't exist here. But user said "identical UI", maybe they want navigation to work. 
+             The plan didn't specify copying other htmls. I'll link back to landingpage for these for now 
+             or assume they might exist or just keep looking identical. 
+             Wait, copying just index.html was the plan. 
+             I will link 'how-it-works' and 'security' to the landingpage versions to be safe?
+             Or just keep them as is and they might 404 if not copied.
+             Let's link to ../landingpage/ for now to ensure they work.
+        -->
+        <a href="../landingpage/how-it-works.html" class="icon-link" aria-label="How it Works" title="How it Works">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-help-circle">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </a>
+
+        <a href="../landingpage/security.html" class="icon-link" aria-label="Safety" title="Safety">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-shield">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="container hero-container">
+      <div class="hero-content">
+        <!-- Login Form -->
+        <form class="login-form" id="loginForm">
+          <h1>Welcome Back</h1>
+          <p>Login to continue sharing and borrowing.</p>
+
+          <div class="form-group">
+            <label for="login-email" class="sr-only">Email address</label>
+            <input type="email" id="login-email" class="form-input" placeholder="Email address" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password" class="sr-only">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="Password" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          <div class="form-footer">
+            <p>Don't have an account? <a href="#" id="signUpBtn" class="text-link">Sign up</a></p>
+          </div>
+        </form>
+
+        <!-- Signup Form (Initially Hidden by CSS) -->
+        <form class="signup-form" id="signupForm">
+          <h1>Create Account</h1>
+          <p>Join our community today.</p>
+
+          <div class="form-group">
+            <label for="signup-name" class="sr-only">Full Name</label>
+            <input type="text" id="signup-name" class="form-input" placeholder="Full Name" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-email" class="sr-only">Email address</label>
+            <input type="email" id="signup-email" class="form-input" placeholder="Email address" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-password" class="sr-only">Password</label>
+            <input type="password" id="signup-password" class="form-input" placeholder="Password" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+          <div class="form-footer">
+            <p>Already have an account? <a href="#" id="signInBtn" class="text-link">Sign in</a></p>
+          </div>
+        </form>
+      </div>
+
+      <div class="hero-visual">
+        <spline-viewer url="https://prod.spline.design/KPZBL5tHQBXWHPo9/scene.splinecode"></spline-viewer>
+      </div>
+    </div>
+  </header>
+
+
+
+  <script src="script.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import {getAnalytics} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+    import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAeIAQIxtlAFd9W4afhKnLhzYlH2k2kmLE",
+      authDomain: "gssitfest.firebaseapp.com",
+      projectId: "gssitfest",
+      storageBucket: "gssitfest.appspot.com",
+      messagingSenderId: "53795093845",
+      appId: "1:53795093845:web:e2d9c9de083d2a2f4183dc",
+      measurementId: "G-23KVJ1LMP7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    console.log("Firebase initialized successfully!", app.name);
+
+    // Get form elements
+    const signupForm = document.querySelector('#signupForm');
+    const loginForm = document.querySelector('#loginForm');
+
+    signupForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = signupForm['signup-name'].value;
+      const email = signupForm['signup-email'].value;
+      const password = signupForm['signup-password'].value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          localStorage.setItem('userName', name);
+          localStorage.setItem('userEmail', email);
+          alert("Account created");
+        })
+        .catch(err => alert(err.message));
+    });
+
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = loginForm['login-email'].value;
+      const password = loginForm['login-password'].value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          localStorage.setItem('userEmail', email);
+          window.location.href = "../mainpage/index.html";
+        })
+        .catch(err => alert(err.message));
+    });
+  </script>
+
+</body>
+</body>
+
+</html>

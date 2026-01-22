@@ -1,0 +1,76 @@
+
+    <!-- Share Item Modal -->
+    <div class="modal-overlay" id="share-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Share Your Item</h3>
+                <button class="close-modal" id="close-modal-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="share-item-form">
+                <div class="form-group">
+                    <label class="form-label">Item Name</label>
+                    <input type="text" class="form-input" name="itemName" required placeholder="e.g., Canon DSLR Camera">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <div class="custom-select form-select">
+                        <div class="select-trigger form-input">
+                            <span class="select-label" id="form-category-label">Select Category</span>
+                            <i data-lucide="chevron-down" class="select-icon"></i>
+                        </div>
+                        <div class="select-options">
+                            <div class="select-option" data-value="Camera">Camera</div>
+                            <div class="select-option" data-value="Tools">Tools</div>
+                            <div class="select-option" data-value="Vehicles">Vehicles</div>
+                            <div class="select-option" data-value="Cars">Cars</div>
+                            <div class="select-option" data-value="Camping">Camping</div>
+                            <div class="select-option" data-value="Books">Books</div>
+                            <div class="select-option" data-value="Music">Music</div>
+                            <div class="select-option" data-value="Electronics">Electronics</div>
+                            <div class="select-option" data-value="Bag">Bag</div>
+                            <div class="select-option" data-value="Services">Services</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Price ($/day)</label>
+                    <input type="number" class="form-input" name="itemPrice" required placeholder="0.00" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Expiry Date</label>
+                    <input type="date" class="form-input" name="itemExpiry" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" name="itemLocation" required placeholder="e.g. New York, NY">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Gmail</label>
+                    <input type="email" class="form-input" name="itemEmail" required placeholder="e.g. user@gmail.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Item Image</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" name="itemImage" accept="image/*">
+                        <i data-lucide="upload-cloud" class="file-icon icon-lg"></i>
+                        <span class="file-text">Click to upload image</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="share-submit-btn">
+                    Share Item
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <button class="fab-btn" id="fab-share-btn"><span class="fab-tooltip">Share item</span><i data-lucide="plus"></i></button>
+
