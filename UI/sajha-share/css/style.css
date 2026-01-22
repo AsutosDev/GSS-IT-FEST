@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+}
+
+#scene3d {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 900px;
+  min-height: 450px;
+  backdrop-filter: blur(20px);
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  overflow: hidden;
+  background: rgba(2, 12, 34, 0.8);
+}
+
+.auth-form {
+  flex: 1;
+  padding: 2rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  font-size: 0.85rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #F472B6;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  background: linear-gradient(to right, #F472B6, #4F46E5);
+  color: white;
+  cursor: pointer;
+}
+
+.mobile-btn {
+  font-size: 0.7rem;
+  color: #9CA3AF;
+}
